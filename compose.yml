@@ -1,0 +1,29 @@
+services:
+  discord-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: discord-bot
+    restart: unless-stopped
+    volumes:
+      # Mount configuration files and environment variables
+      - ./config.yml:/app/config.yml
+      - ./.env:/app/.env
+    networks:
+      - dokalab_host_network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    environment:
+      - NODE_ENV=production
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  dokalab_host_network:
+    external: true 
